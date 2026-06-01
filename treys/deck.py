@@ -25,7 +25,19 @@ class Deck:
         for _ in range(n):
             cards.append(self.cards.pop())
         return cards
+    
+    def pull(self, card: int) -> int:
+        self.cards.remove(card)
+        return card
+    
+    def pull_many(self, cards: list[int]) -> list[int]:
+        for card in cards:
+            self.cards.remove(card)
+        return cards
 
+    def sorted_print(self) -> None:
+        print(Card.ints_to_pretty_str(sorted(self.cards)))
+        
     def __str__(self) -> str:
         return Card.ints_to_pretty_str(self.cards)
 
