@@ -4,7 +4,6 @@ from typing import Sequence
 from .card import Card
 from .lookup import LookupTable
 
-
 class Evaluator:
     """
     Evaluates hand strengths using a variant of Cactus Kev's algorithm:
