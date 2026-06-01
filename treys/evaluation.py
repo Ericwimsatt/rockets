@@ -15,10 +15,24 @@ lookupTable = LookupTable()
 
 def evaluate(hand: list[int], board: list[int]) -> int:
     all_cards = hand + board
-    return hand_size_map[len(all_cards)](all_cards)
+    if len(all_cards) < 5:
+        return unfull_hand_score(all_cards)
+    
+    minimum = LookupTable.MAX_HIGH_CARD
+
+    for combo in itertools.combinations(all_cards, 5):
+        score = five_card_score(combo)
+        if score < minimum:
+            minimum = score
+
+    return minimum
+
+def unfull_hand_score(cards: Sequence[int]) -> int:
+    prime = Card.prime_product_from_hand(cards)
+    return lookupTable.unsuited_lookup[prime]
 
 
-def _five(cards: Sequence[int]) -> int:
+def five_card_score(cards: Sequence[int]) -> int:
     # if flush
     if cards[0] & cards[1] & cards[2] & cards[3] & cards[4] & 0xF000:
         handOR = (cards[0] | cards[1] | cards[2] | cards[3] | cards[4]) >> 16
@@ -29,35 +43,6 @@ def _five(cards: Sequence[int]) -> int:
     else:
         prime = Card.prime_product_from_hand(cards)
         return lookupTable.unsuited_lookup[prime]
-
-
-def _six(cards: Sequence[int]) -> int:
-    minimum = LookupTable.MAX_HIGH_CARD
-
-    for combo in itertools.combinations(cards, 5):
-        score = _five(combo)
-        if score < minimum:
-            minimum = score
-
-    return minimum
-
-
-def _seven(cards: Sequence[int]) -> int:
-    minimum = LookupTable.MAX_HIGH_CARD
-
-    for combo in itertools.combinations(cards, 5):
-        score = _five(combo)
-        if score < minimum:
-            minimum = score
-
-    return minimum
-
-
-hand_size_map = {
-    5: _five,
-    6: _six,
-    7: _seven
-}
 
 
 def get_rank_class(hr: int) -> int:
