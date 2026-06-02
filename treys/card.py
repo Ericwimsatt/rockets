@@ -82,6 +82,16 @@ class Card:
         return bitrank | suit | rank | rank_prime
 
     @staticmethod
+    def new_from_ints(rank_int: int, suit_int: int) -> int:
+        rank_prime = Card.PRIMES[rank_int]
+
+        bitrank = 1 << rank_int << 16
+        suit = suit_int << 12
+        rank = rank_int << 8
+
+        return bitrank | suit | rank | rank_prime
+
+    @staticmethod
     def int_to_str(card_int: int) -> str:
         rank_int = Card.get_rank_int(card_int)
         suit_int = Card.get_suit_int(card_int)

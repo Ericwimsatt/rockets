@@ -16,7 +16,7 @@ lookupTable = LookupTable()
 def evaluate(hand: list[int], board: list[int]) -> int:
     all_cards = hand + board
     if len(all_cards) < 5:
-        return unfull_hand_score(all_cards)
+        raise Exception("Not enough cards to evaluate hand, at least 5 required")
     
     minimum = LookupTable.MAX_HIGH_CARD
 
@@ -26,11 +26,6 @@ def evaluate(hand: list[int], board: list[int]) -> int:
             minimum = score
 
     return minimum
-
-def unfull_hand_score(cards: Sequence[int]) -> int:
-    prime = Card.prime_product_from_hand(cards)
-    return lookupTable.unsuited_lookup[prime]
-
 
 def five_card_score(cards: Sequence[int]) -> int:
     # if flush
