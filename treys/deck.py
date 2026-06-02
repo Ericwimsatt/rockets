@@ -13,12 +13,16 @@ class Deck:
 
     def __init__(self, seed: int = None) -> None:
         self._random = Random(seed)
-        self.shuffle()
-
-    def shuffle(self) -> None:
-        # and then shuffle
         self.cards = Deck.GetFullDeck()
         self._random.shuffle(self.cards)
+
+    @DeprecationWarning
+    def shuffle(self) -> None:
+        '''left in for compatibility'''
+        # make new deck and then shuffle
+        self.cards = Deck.GetFullDeck()
+        self._random.shuffle(self.cards)
+        
 
     def draw(self, n: int = 1) -> list[int]:
         cards = []
@@ -37,7 +41,7 @@ class Deck:
 
     def sorted_print(self) -> None:
         print(Card.ints_to_pretty_str(sorted(self.cards)))
-        
+
     def __str__(self) -> str:
         return Card.ints_to_pretty_str(self.cards)
 
